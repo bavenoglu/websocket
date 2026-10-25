@@ -1,0 +1,41 @@
+{\rtf1\ansi\ansicpg1252\cocoartf2907
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww20440\viewh14540\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 \
+For benchmark runs 1 to 3:\
+  For each client count in [1, 32, 128, 512, 2048]:\
+    For each message size in [100, 33000, 66000]:\
+      For each time interval in [1, 2, 5, 10]:\
+        For each timeout duration in [500, 2000, 5000, 10000]:\
+          1. Start the server container.\
+             - Configure OS threads to 4.\
+             - Start the HTTP server and WebSocket endpoint.\
+             - Create a logging channel with capacity for 1,000,000 events.\
+             - Accept WebSocket connections and echo received messages.\
+             - Measure server-side elapsed time for message processing and echo writes.\
+             - A logging goroutine batches 100,000 events before writing them to the CSV writer.\
+          2. Start the client container.\
+             - Configure OS threads to 4.\
+             - Create the configured number of client goroutines.\
+             - Each goroutine establishes one WebSocket connection.\
+             - Each connection waits at a shared start barrier.\
+             - Release the barrier after all client goroutines have been launched.\
+             - Each client sends binary messages and waits for the corresponding server response before sending its next message.\
+             - Exclude the first five messages per client from client-side latency logging.\
+             - Create a logging channel with capacity for 200,000 events.\
+             - A logging goroutine batches 10,000 events before writing them to the CSV writer.\
+          3. Wait for the client workload to finish.\
+             - Wait for all client goroutines to return.\
+             - Close the client logging channel.\
+             - Flush and finalize the client CSV output safely.\
+          4. Stop the server container.\
+             - Stop accepting new connections.\
+             - Allow active handlers to finish.\
+             - Drain the server logging channel.\
+             - Flush and finalize the server CSV output safely.\
+          5. Verify the output files and record test completion.\
+}
