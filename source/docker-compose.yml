@@ -1,0 +1,45 @@
+version: "3.9"
+
+services:
+
+  go:
+    build: ./servers/go
+    image: ws-go
+    ports:
+      - "8000:8000"
+
+  node-ws:
+    build: ./servers/node.js-ws
+    image: ws-node-ws
+    ports:
+      - "8001:8001"
+
+  node-uws:
+    build: ./servers/node.js-uws
+    image: ws-node-uws
+    ports:
+      - "8002:8002"
+
+  java-ws:
+    build: ./servers/java-ws
+    image: ws-java-ws
+    ports:
+      - "8003:8003"
+
+  java-netty:
+    build: ./servers/java-netty
+    image: ws-java-netty
+    ports:
+      - "8004:8004"
+
+  python:
+    build: ./servers/python
+    image: ws-python
+    ports:
+      - "8005:8005"
+
+  php:
+    build: ./servers/php
+    image: ws-php
+    ports:
+      - "8006:8006"

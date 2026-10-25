@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'io.netty:netty-all:4.2.9.Final'
+}
+
+application {
+    mainClass = 'Server'
+}
+
+tasks.withType(JavaCompile) {
+    options.release = 25
+}
+
+/* FAT JAR */
+jar {
+    manifest {
+        attributes 'Main-Class': 'Server'
+    }
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
