@@ -78,11 +78,14 @@ for idx, interval in enumerate(intervals):
         alpha=0.85,
     )
 
-    # P95 CI Whiskers
-    p95_err = [
-        mid_data["P95_Lower"], # mid_data["P95"] - mid_data["P95_Lower"],
-        mid_data["P95_Upper"] # - mid_data["P95"],
-    ]
+    p95_lower_error = mid_data["P95"] - mid_data["P95_Lower"]
+    p95_upper_error = mid_data["P95_Upper"] - mid_data["P95"]
+
+    p95_err = np.vstack([
+        p95_lower_error,
+        p95_upper_error,
+    ])
+
     ax.errorbar(
         bar_x,
         mid_data["P95"],
